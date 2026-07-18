@@ -6,29 +6,39 @@ type PortfolioProps = {
 };
 
 function buildSrcSet(url: string) {
-  // Try to detect a `w=` query param and replace it for responsive sizes
   try {
     const urlObj = new URL(url);
     const params = urlObj.searchParams;
     const w = params.get("w");
-    if (w) {
-      const sizes = [400, 800, 1200];
-      const srcset = sizes
-        .map((s) => {
-          const copy = new URL(url);
-          copy.searchParams.set("w", String(s));
-          return `${copy.toString()} ${s}w`;
-        })
-        .join(", ");
-      // Return default small src and srcset
-      const small = new URL(url);
-      small.searchParams.set("w", "400");
-      return { small: small.toString(), srcset };
-    }
+    const sizes = [400, 800, 1200];
+
+    const srcset = sizes
+      .map((s) => {
+        const copy = new URL(url);
+        copy.searchParams.set("w", String(s));
+        return `${copy.toString()} ${s}w`;
+      })
+      .join(", ");
+
+    const webpSrcset = sizes
+      .map((s) => {
+        const copy = new URL(url);
+        copy.searchParams.set("w", String(s));
+        copy.searchParams.set("fm", "webp");
+        return `${copy.toString()} ${s}w`;
+      })
+      .join(", ");
+
+    const small = new URL(url);
+    small.searchParams.set("w", "400");
+
+    const smallWebp = new URL(small.toString());
+    smallWebp.searchParams.set("fm", "webp");
+
+    return { small: small.toString(), srcset, webpSrcset, smallWebp: smallWebp.toString() };
   } catch (e) {
-    // not a valid URL, fallthrough
+    return { small: url, srcset: `${url} 800w`, webpSrcset: `${url} 800w`, smallWebp: url };
   }
-  return { small: url, srcset: `${url} 800w` };
 }
 
 export default function Portfolio({ scrollToSection }: PortfolioProps) {
@@ -52,20 +62,23 @@ export default function Portfolio({ scrollToSection }: PortfolioProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {PROJECTS.map((proj) => {
-          const { small, srcset } = buildSrcSet(proj.previewUrl);
+          const { small, srcset, webpSrcset, smallWebp } = buildSrcSet(proj.previewUrl);
           return (
             <article key={proj.id} className="bg-black/20 backdrop-blur-md border border-slate-800 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl">
               <div className="relative group overflow-hidden">
-                <img
-                  src={small}
-                  srcSet={srcset}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  alt={proj.title}
-                  className="w-full h-[260px] object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                  decoding="async"
-                  referrerPolicy="no-referrer"
-                />
+                <picture>
+                  <source type="image/webp" srcSet={webpSrcset} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                  <img
+                    src={small}
+                    srcSet={srcset}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    alt={proj.title}
+                    className="w-full h-[260px] object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                  />
+                </picture>
                 <span className="absolute top-4 left-4 bg-black/70 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md">{proj.category}</span>
               </div>
 

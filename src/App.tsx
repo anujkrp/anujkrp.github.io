@@ -25,6 +25,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen selection:bg-[#FF6B6B] selection:text-white transition-colors duration-300 text-slate-100 font-sans antialiased overflow-hidden relative">
+
+      {/* Skip link for keyboard users */}
+      <a href="#main-content" className="sr-only focus:not-sr-only absolute left-4 top-4 z-50 bg-[#071A52] text-white px-3 py-2 rounded-md">Skip to content</a>
+
       <Header
         darkMode={darkMode}
         setDarkMode={setDarkMode}
@@ -34,7 +38,7 @@ export default function App() {
         scrollToSection={scrollToSection}
       />
 
-      <main>
+      <main id="main-content">
         <Hero scrollToSection={scrollToSection} />
         <Services scrollToSection={scrollToSection} />
         <Portfolio scrollToSection={scrollToSection} />

@@ -1,93 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
-@theme {
+:root{
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", sans-serif;
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  
-  --color-primary: #2563EB;
-  --color-secondary: #14B8A6;
-  --color-accent: #F97316;
-  
-  --color-slate-950: #020617;
+
+  /* Bold Creative palette */
+  --color-navy: #071A52;
+  --color-coral: #FF6B6B;
+  --color-coral-2: #FF8A65;
+  --color-accent: var(--color-coral);
+  --color-muted: #94A3B8;
+  --glass-light-bg: rgba(255,255,255,0.06);
+  --glass-dark-bg: rgba(7,26,82,0.48);
 }
 
 @layer utilities {
-  /* Premium Immersive Glassmorphism classes */
+  /* Brand gradient used across the site */
+  .accent-gradient {
+    background: linear-gradient(90deg, var(--color-navy) 0%, var(--color-coral) 100%);
+    color: white;
+  }
+
+  .brand-badge {
+    background: linear-gradient(135deg, rgba(7,26,82,0.95), rgba(255,107,107,0.95));
+    box-shadow: 0 10px 30px rgba(7,26,82,0.25);
+    color: white;
+  }
+
   .glass-light {
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--glass-light-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.04);
   }
 
   .glass-dark {
-    background: rgba(2, 6, 23, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-dark-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.06);
   }
 
-  /* Custom Glow animations */
-  .glow-teal {
-    box-shadow: 0 0 30px -5px rgba(20, 184, 166, 0.25);
+  .glow-coral {
+    box-shadow: 0 8px 30px -10px rgba(255,107,107,0.35);
   }
 
-  .glow-blue {
-    box-shadow: 0 0 30px -5px rgba(37, 99, 235, 0.25);
-  }
-
-  .glow-orange {
-    box-shadow: 0 0 30px -5px rgba(249, 115, 22, 0.2);
+  .glow-navy {
+    box-shadow: 0 8px 40px -15px rgba(7,26,82,0.5);
   }
 }
 
-/* Beautiful Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,107,107,0.22); border-radius: 9999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,107,107,0.45); }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* Base animations */
+@keyframes float { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-10px); } }
+.animate-float { animation: float 6s ease-in-out infinite; }
 
-.dark ::-webkit-scrollbar-track {
-  background: rgba(2, 6, 23, 0.3);
-}
+@keyframes pulse-slow { 0%,100%{ opacity:0.25; transform:scale(1);} 50%{ opacity:0.5; transform:scale(1.06);} }
+.animate-pulse-slow { animation: pulse-slow 8s infinite ease-in-out; }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(20, 184, 166, 0.3);
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
+/* Typography convenience */
+.font-display { font-family: var(--font-display); }
+.font-sans { font-family: var(--font-sans); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(20, 184, 166, 0.6);
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
+/* Global overrides for bold creative look */
+html,body,#root { height:100%; }
+body { background: linear-gradient(180deg, #071A52 0%, #041033 100%); color: #E6EEF8; }
 
-/* Base resets & animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
+/* Hero specific tweaks */
+.hero-accent-text { background: linear-gradient(90deg, #FF6B6B, #FF8A65); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
+/* Utility for coral buttons when Tailwind classes are not changed */
+.btn-coral { background: linear-gradient(90deg,var(--color-coral), var(--color-coral-2)); color: white; }
 
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.25; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(1.12); }
-}
+/* Make sure images have a subtle border on dark backgrounds */
+img { image-rendering: auto; }
 
-.animate-pulse-slow {
-  animation: pulse-slow 10s infinite ease-in-out;
-}
-
-
+/* Accessibility: focus outlines */
+:focus { outline: 3px solid rgba(255,107,107,0.18); outline-offset: 2px; }
